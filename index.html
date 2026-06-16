@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Port de Mario Kart DS</title>
+    <style>
+        body { background-color: #111; color: white; text-align: center; font-family: sans-serif; padding-top: 50px; }
+        #game-container { width: 640px; height: 480px; margin: 20px auto; border: 2px solid #333; background: #000; }
+        #file-input { margin: 20px; padding: 10px; background: #222; color: white; border: 1px solid #555; cursor: pointer; border-radius: 5px; }
+        #file-input:hover { background: #333; }
+    </style>
+</head>
+<body>
+
+    <h1>Mario Kart DS Web Player</h1>
+    
+    <p>Selecciona tu ROM de Mario Kart DS (.nds) para arrancar el juego:</p>
+    <input type="file" id="file-input" accept=".nds">
+
+    <div id="game-container">
+        <div id="game"></div>
+    </div>
+
+    <script>
+        EJS_player = '#game';
+        EJS_core = 'nds'; 
+        // El truco supremo: cargamos los archivos pesados desde su servidor público
+        EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
+
+        document.getElementById('file-input').onchange = function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                EJS_gameUrl = URL.createObjectURL(file);
+                
+                let loader = document.createElement('script');
+                // Cargamos el motor de arranque también desde el servidor público
+                loader.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+                document.body.appendChild(loader);
+            }
+        };
+    </script>
+
+</body>
+</html>
