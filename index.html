@@ -2,20 +2,17 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Port de Mario Kart DS</title>
+    <title>Mario Kart DS Instantáneo</title>
     <style>
         body { background-color: #111; color: white; text-align: center; font-family: sans-serif; padding-top: 50px; }
         #game-container { width: 640px; height: 480px; margin: 20px auto; border: 2px solid #333; background: #000; }
-        #file-input { margin: 20px; padding: 10px; background: #222; color: white; border: 1px solid #555; cursor: pointer; border-radius: 5px; }
-        #file-input:hover { background: #333; }
+        .loading-text { color: #aaa; font-style: italic; }
     </style>
 </head>
 <body>
 
-    <h1>Mario Kart DS Web Player</h1>
-    
-    <p>Selecciona tu ROM de Mario Kart DS (.nds) para arrancar el juego:</p>
-    <input type="file" id="file-input" accept=".nds">
+    <h1>Mario Kart DS Online</h1>
+    <p class="loading-text">Descargando juego en la RAM... Espera unos segundos a que cargue.</p>
 
     <div id="game-container">
         <div id="game"></div>
@@ -24,20 +21,15 @@
     <script>
         EJS_player = '#game';
         EJS_core = 'nds'; 
-        // El truco supremo: cargamos los archivos pesados desde su servidor público
         EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
+        
+        // EL TRUCO: Aquí pegas el enlace directo de internet donde esté la ROM (.nds)
+        EJS_gameUrl = 'https://archive.org/download/6108-pokemon-version-blanche-2-f-frie-nds/0168%20-%20Mario%20Kart%20DS%20%28U%29%28SCZ%29.nds'; 
 
-        document.getElementById('file-input').onchange = function(e) {
-            let file = e.target.files[0];
-            if (file) {
-                EJS_gameUrl = URL.createObjectURL(file);
-                
-                let loader = document.createElement('script');
-                // Cargamos el motor de arranque también desde el servidor público
-                loader.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-                document.body.appendChild(loader);
-            }
-        };
+        // Arranca el emulador automáticamente al entrar a la web
+        let loader = document.createElement('script');
+        loader.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+        document.body.appendChild(loader);
     </script>
 
 </body>
