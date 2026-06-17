@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mario Kart DS Instantáneo</title>
+    <style>
+        body { background-color: #111; color: white; text-align: center; font-family: sans-serif; padding-top: 50px; }
+        #game-container { width: 640px; height: 480px; margin: 20px auto; border: 2px solid #333; background: #000; }
+        .loading-text { color: #aaa; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h1>Mario Kart DS Online</h1>
+    <p class="loading-text">Descargando juego en la RAM... Espera unos segundos a que cargue.</p>
+
+    <div id="game-container">
+        <div id="game"></div>
+    </div>
+
+    <script>
+        EJS_player = '#game';
+        EJS_core = 'nds'; 
+        EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; 
+        
+        // EL TRUCO: Aquí pegas el enlace directo de internet donde esté la ROM (.nds)
+        EJS_gameUrl = 'https://archive.org/download/6108-pokemon-version-blanche-2-f-frie-nds/0168%20-%20Mario%20Kart%20DS%20%28U%29%28SCZ%29.nds'; 
+
+        // Arranca el emulador automáticamente al entrar a la web
+        let loader = document.createElement('script');
+        loader.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+        document.body.appendChild(loader);
+    </script>
+
+</body>
+</html>
