@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emulador web de Sr. Croquetas ⚡</title>
     <style>
+        /* 1. VARIABLES INICIALES (Tema Negro por defecto) */
         :root {
             --bg-general: linear-gradient(3deg, #121212 0%, #000000 100%);
             --color-acento: #ffffff;
             --color-sombra: rgba(255, 255, 255, 0.3);
         }
 
+        /* Fondo general usando la variable dinámina */
         body {
             background: var(--bg-general);
             color: #ffffff;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -25,11 +27,29 @@
             transition: background 0.5s ease;
         }
 
-        h1 { color: var(--color-acento); margin-bottom: 5px; font-size: 28px; text-shadow: 0 0 10px var(--color-sombra); }
+        /* Título personalizado del Sr. Croquetas */
+        h1 { 
+            color: var(--color-acento); 
+            margin-bottom: 5px; 
+            font-size: 28px; 
+            text-shadow: 0 0 10px var(--color-sombra);
+            transition: color 0.3s, text-shadow 0.3s;
+            font-weight: 800;
+        }
         
-        #subtitulo { color: var(--color-acento); margin-bottom: 30px; font-size: 16px; opacity: 0.8; }
+        #subtitulo { 
+            color: var(--color-acento); 
+            margin-bottom: 30px; 
+            font-size: 16px; 
+            opacity: 0.8; 
+            transition: color 0.3s;
+        }
 
-        #main-menu { display: flex; gap: 30px; }
+        /* ---------------- MENÚ DE CONSOLAS ---------------- */
+        #main-menu {
+            display: flex;
+            gap: 30px;
+        }
 
         .console-card {
             background: #161616;
@@ -42,27 +62,102 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s, background 0.3s;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
         }
 
-        .console-card:hover { transform: translateY(-10px); background: #1e1e1e; }
+        .console-card:hover {
+            transform: translateY(-10px);
+            background: #1e1e1e;
+        }
+
+        /* Brillo de las tarjetas en el menú principal */
         .card-psx:hover { border-color: #0072ce; box-shadow: 0 15px 25px rgba(0, 114, 206, 0.5); }
         .card-n64:hover { border-color: #e60012; box-shadow: 0 15px 25px rgba(230, 0, 18, 0.5); }
         .card-nds:hover { border-color: #00e5ff; box-shadow: 0 15px 25px rgba(0, 229, 255, 0.5); }
 
-        .console-card img { width: 130px; object-fit: contain; margin-bottom: 15px; filter: brightness(0) invert(1); }
-        .console-card h3 { margin: 0; color: #ffffff; font-size: 18px; }
+        .console-card img {
+            width: 130px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            /* Si bajas las fotos ya en blanco, puedes borrar esta línea de abajo. 
+               Si las bajas en negro, esta línea las vuelve blancas automáticamente */
+            filter: brightness(0) invert(1); 
+        }
 
-        #upload-screen { display: none; flex-direction: column; align-items: center; background: #161616; padding: 50px; border: 2px dashed var(--color-acento); border-radius: 12px; position: relative; }
-        
-        .upload-btn { background-color: var(--color-acento); color: #121212; padding: 15px 30px; font-weight: bold; border-radius: 8px; cursor: pointer; }
-        
+        .console-card h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 18px;
+        }
+
+        /* ---------------- PANTALLA DE CARGA ---------------- */
+        #upload-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: #161616;
+            padding: 50px 40px 40px 40px;
+            border: 2px dashed var(--color-acento);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: border-color 0.3s;
+        }
+
+        /* Botón de carga adaptativo */
+        .upload-btn {
+            background-color: var(--color-acento);
+            color: #121212;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px var(--color-sombra);
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
         input[type="file"] { display: none; }
 
-        .btn-volver { position: absolute; top: 12px; left: 15px; background: none; border: 1px solid var(--color-acento); color: var(--color-acento); padding: 5px 12px; cursor: pointer; }
+        /* EL BOTÓN DE VOLVER GAMER CON LUZ */
+        .btn-volver {
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            background: none;
+            border: 1px solid var(--color-acento);
+            color: var(--color-acento);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
 
-        #emulator-container { width: 800px; height: 600px; max-width: 95vw; max-height: 80vh; display: none; border-radius: 12px; overflow: hidden; }
+        .btn-volver:hover {
+            color: #ffffff;
+            background-color: var(--color-acento);
+            box-shadow: 0 0 15px var(--color-acento);
+            text-shadow: 0 0 5px #ffffff;
+        }
+
+        /* ---------------- CONTENEDOR DEL EMULADOR ---------------- */
+        #emulator-container {
+            width: 800px; height: 600px;
+            max-width: 95vw; max-height: 80vh;
+            display: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -70,76 +165,113 @@
     <h1 id="titulo-principal">Emulador web de Sr. Croquetas 🕹️</h1>
     <p id="subtitulo">Selecciona la plataforma a emular</p>
     
+    <!-- MENÚ DE CONSOLAS CON RUTAS LOCALES (A prueba de institutos) -->
     <div id="main-menu">
-        <div class="console-card card-psx" onclick="iniciarCarga('psx', '.bin,.img,.chd,.iso', 'PlayStation 1')">
-            <img src="ps1.png" alt="PS1">
+        <!-- Tarjeta PS1 -->
+        <div class="console-card card-psx" onclick="abrirCarga('psx', '.bin,.img,.chd,.iso', 'PlayStation 1')">
+            <img src="ps1.png" alt="PlayStation">
             <h3>PlayStation 1</h3>
         </div>
-        <div class="console-card card-nds" onclick="iniciarCarga('nds', '.nds', 'Nintendo DS')">
-            <img src="nds.png" alt="NDS">
+
+        <!-- Tarjeta NDS -->
+        <div class="console-card card-nds" onclick="abrirCarga('nds', '.nds', 'Nintendo DS')">
+            <img src="nds.png" alt="DS">
             <h3>Nintendo DS</h3>
         </div>
-        <div class="console-card card-n64" onclick="iniciarCarga('n64', '.n64,.z64,.v64', 'Nintendo 64')">
+
+        <!-- Tarjeta N64 -->
+        <div class="console-card card-n64" onclick="abrirCarga('n64', '.n64,.z64,.v64', 'Nintendo 64')">
             <img src="n64.png" alt="N64">
             <h3>Nintendo 64</h3>
         </div>
     </div>
 
+    <!-- ZONA DE SUBIR EL ARCHIVO -->
     <div id="upload-screen">
-        <button class="btn-volver" onclick="volver()">← Volver</button>
-        <h2 id="titulo-carga" style="color: var(--color-acento);">Sube tu juego</h2>
+        <button class="btn-volver" onclick="volverMenu()">← Volver</button>
+        <h2 id="titulo-carga" style="color: var(--color-acento); margin-top: 0; transition: color 0.3s;">Sube tu juego</h2>
+        <p id="info-formatos" style="color: #aaaaaa; font-size: 12px; margin-bottom: 20px;">Formatos soportados: </p>
+        
         <label class="upload-btn">
             Seleccionar ROM
             <input type="file" id="rom-selector">
         </label>
     </div>
 
+    <!-- PANTALLA DEL EMULADOR -->
     <div id="emulator-container"></div>
 
     <script>
-        let consolaActiva = "";
+        const mainMenu = document.getElementById('main-menu');
+        const uploadScreen = document.getElementById('upload-screen');
+        const emuContainer = document.getElementById('emulator-container');
+        const subtitulo = document.getElementById('subtitulo');
+        const romSelector = document.getElementById('rom-selector');
+        const root = document.documentElement;
         
-        function iniciarCarga(consola, ext, nombre) {
-            consolaActiva = consola;
-            document.getElementById('main-menu').style.display = 'none';
-            document.getElementById('subtitulo').style.display = 'none';
-            document.getElementById('upload-screen').style.display = 'flex';
-            document.getElementById('titulo-carga').innerText = 'Cargar ' + nombre;
-            document.getElementById('rom-selector').accept = ext;
+        let consolaActiva = "";
+
+        function abrirCarga(plataforma, extensiones, nombre) {
+            consolaActiva = plataforma;
+            
+            // Configuración de colores
+            if (plataforma === 'psx') {
+                root.style.setProperty('--bg-general', 'linear-gradient(135deg, #002561 0%, #000000 100%)');
+                root.style.setProperty('--color-acento', '#0072ce');
+                root.style.setProperty('--color-sombra', 'rgba(0, 114, 206, 0.5)');
+            } else if (plataforma === 'n64') {
+                root.style.setProperty('--bg-general', 'linear-gradient(135deg, #7a0006 0%, #000000 100%)');
+                root.style.setProperty('--color-acento', '#e60012');
+                root.style.setProperty('--color-sombra', 'rgba(230, 0, 18, 0.5)');
+            } else if (plataforma === 'nds') {
+                root.style.setProperty('--bg-general', 'linear-gradient(135deg, #004b57 0%, #000000 100%)');
+                root.style.setProperty('--color-acento', '#00e5ff');
+                root.style.setProperty('--color-sombra', 'rgba(0, 229, 255, 0.5)');
+            }
+
+            mainMenu.style.display = 'none';
+            uploadScreen.style.display = 'flex';
+            subtitulo.style.display = 'none';
+            
+            document.getElementById('titulo-carga').innerText = 'Cargar juego de ' + nombre;
+            document.getElementById('info-formatos').innerText = 'Formatos soportados: ' + extensiones;
+            romSelector.accept = extensiones;
         }
 
-        function volver() {
-            document.getElementById('main-menu').style.display = 'flex';
-            document.getElementById('subtitulo').style.display = 'block';
-            document.getElementById('upload-screen').style.display = 'none';
+        function volverMenu() {
+            root.style.setProperty('--bg-general', 'linear-gradient(3deg, #121212 0%, #000000 100%)');
+            root.style.setProperty('--color-acento', '#ffffff');
+            root.style.setProperty('--color-sombra', 'rgba(255, 255, 255, 0.3)');
+
+            uploadScreen.style.display = 'none';
+            mainMenu.style.display = 'flex';
+            subtitulo.style.display = 'block';
+            romSelector.value = '';
         }
 
-        document.getElementById('rom-selector').addEventListener('change', function(e) {
+        romSelector.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
 
-            document.getElementById('upload-screen').style.display = 'none';
+            uploadScreen.style.display = 'none';
             document.getElementById('titulo-principal').style.display = 'none';
-            const container = document.getElementById('emulator-container');
-            container.style.display = 'block';
-            container.innerHTML = '<div id="game"></div>';
+            emuContainer.style.display = 'block';
 
-            // CONFIGURACIÓN OFICIAL DE EMULATORJS
-            window.EJS_player = '#game';
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
-            window.EJS_gameUrl = URL.createObjectURL(file);
-            window.EJS_startOnLoaded = true;
+            const tRomUrl = URL.createObjectURL(file);
+            emuContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
 
-            // Definir núcleo según consola
-            if(consolaActiva === 'psx') window.EJS_core = 'pcsx_rearmed';
-            else if(consolaActiva === 'n64') window.EJS_core = 'mupen64plus';
-            else if(consolaActiva === 'nds') window.EJS_core = 'melonds';
+            window.EmuJSWidth = "800";
+            window.EmuJSHeight = "600";
+            window.EmuJSFolder = "https://emulatorjs.org/emujs"; 
+            window.EmuPlatform = consolaActiva;
+            window.EmuRomUrl = tRomUrl;
+            window.EmuJSStartOnLoaded = true;
 
-            // Inyectar el script del cargador
             const script = document.createElement('script');
-            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
+            script.src = "https://emulatorjs.org/emujs/emu-main.js";
             document.body.appendChild(script);
         });
     </script>
+
 </body>
 </html>
