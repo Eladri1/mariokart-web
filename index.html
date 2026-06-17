@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Emulador Clínico de DS ⚡</title>
+    <title>Mi Emulador 3D Clínico ⚡</title>
     <style>
         /* Estilos oscuros tipo gamer / hacker */
         body {
@@ -41,6 +41,7 @@
             border: 2px dashed #a200ff;
             border-radius: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             position: relative;
@@ -57,11 +58,11 @@
             border-radius: 8px;
             cursor: pointer;
             transition: 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0, 255, 204, 0.3);
+            box-shadow: 0 4px 15px rgba(166, 0, 255, 0.4); /* Sombra adaptada a tu morado */
         }
 
         .upload-btn:hover {
-            background-color: #a600ff;
+            background-color: #b833ff; /* Un pelín más claro al pasar el ratón */
             transform: scale(1.05);
         }
 
@@ -74,18 +75,27 @@
             height: 100%;
             border: none;
         }
+        
+        /* Texto informativo de debajo del botón */
+        .info-consolas {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #f200ff;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Nintendo DS Web Player 🕹️</h1>
-    <p>Arrastra o selecciona cualquier archivo <strong>.nds</strong> para jugar al toque</p>
+    <h1>Estación Retro 3D Web 🕹️</h1>
+    <p>Arrastra o selecciona tu juego de <strong>DS, N64 o PS1</strong> para jugar al toque</p>
     
-    <div id="emulator-container" id="drop-zone">
+    <div id="emulator-container">
         <label class="upload-btn">
-            Seleccionar ROM (.nds)
-            <input type="file" id="rom-selector" accept=".nds">
+            Seleccionar ROM
+            <input type="file" id="rom-selector" accept=".nds,.n64,.z64,.v64,.bin,.img,.chd,.iso">
         </label>
+        <div class="info-consolas">Soporta: .nds, .n64, .z64, .bin, .chd...</div>
     </div>
 
     <script>
@@ -96,22 +106,39 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            // Alquimia pura: Convertimos tu archivo local en una URL temporal
+            // 1. Pillamos la extensión para saber qué consola es
+            const nombreArchivo = file.name.toLowerCase();
+            const extension = nombreArchivo.split('.').pop();
+
+            let consolaIdentificada = "";
+
+            if (extension === "nds") {
+                consolaIdentificada = "nds"; // Nintendo DS
+            } else if (extension === "n64" || extension === "z64" || extension === "v64") {
+                consolaIdentificada = "n64"; // Nintendo 64
+            } else if (extension === "bin" || extension === "img" || extension === "chd" || extension === "iso") {
+                consolaIdentificada = "psx"; // PlayStation 1
+            } else {
+                alert("Formato no reconocido. Sube un juego de DS, N64 o PS1.");
+                return;
+            }
+
+            // 2. Alquimia pura: Convertimos tu archivo local en una URL temporal
             const tRomUrl = URL.createObjectURL(file);
 
-            // Quitamos el botón y metemos el div que necesita el emulador
+            // 3. Quitamos el botón y metemos el div que necesita el emulador
             container.style.border = "none";
             container.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
 
-            // Configuración global de EmulatorJS
+            // 4. Configuración global de EmulatorJS
             window.EmuJSWidth = "800";
             window.EmuJSHeight = "600";
             window.EmuJSFolder = "https://emulatorjs.org/emujs"; // Servidor con los motores WASM
-            window.EmuPlatform = "nds";
+            window.EmuPlatform = consolaIdentificada; // <--- Magia automática aquí
             window.EmuRomUrl = tRomUrl;
             window.EmuJSStartOnLoaded = true;
 
-            // Inyectamos el script principal que arranca la magia
+            // 5. Inyectamos el script principal que arranca la magia
             const script = document.createElement('script');
             script.src = "https://emulatorjs.org/emujs/emu-main.js";
             document.body.appendChild(script);
