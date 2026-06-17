@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estación Retro 3D Dinámica ⚡</title>
+    <title>Estación Retro 3D | Sr. Croquetas ⚡</title>
     <style>
         /* 1. VARIABLES INICIALES (Tema Negro por defecto) */
         :root {
@@ -24,16 +24,17 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            transition: background 0.5s ease; /* Transición suave de color de fondo */
+            transition: background 0.5s ease;
         }
 
-        /* Títulos usando el color de acento dinámico */
+        /* Título personalizado del Sr. Croquetas */
         h1 { 
             color: var(--color-acento); 
             margin-bottom: 5px; 
             font-size: 28px; 
             text-shadow: 0 0 10px var(--color-sombra);
             transition: color 0.3s, text-shadow 0.3s;
+            font-weight: 800;
         }
         
         #subtitulo { 
@@ -65,23 +66,22 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
         }
 
-        /* Efecto levantar tarjeta general */
         .console-card:hover {
             transform: translateY(-10px);
             background: #1e1e1e;
         }
 
-        /* Brillo personalizado para cada consola en el menú principal */
+        /* Brillo de las tarjetas en el menú principal */
         .card-psx:hover { border-color: #0072ce; box-shadow: 0 15px 25px rgba(0, 114, 206, 0.5); }
         .card-n64:hover { border-color: #e60012; box-shadow: 0 15px 25px rgba(230, 0, 18, 0.5); }
         .card-nds:hover { border-color: #00e5ff; box-shadow: 0 15px 25px rgba(0, 229, 255, 0.5); }
 
         .console-card img {
-            width: 120px;
-            height: 80px;
+            width: 130px;
+            height: 75px;
             object-fit: contain;
             margin-bottom: 15px;
-            filter: brightness(0) invert(1); /* Pone los logos en blanco para estética limpia */
+            filter: brightness(0) invert(1); /* Mantiene los logos limpios en blanco */
         }
 
         .console-card h3 {
@@ -96,8 +96,8 @@
             flex-direction: column;
             align-items: center;
             background: #161616;
-            padding: 40px;
-            border: 2px dashed var(--color-acento); /* Borde dinámico */
+            padding: 50px 40px 40px 40px;
+            border: 2px dashed var(--color-acento);
             border-radius: 12px;
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
@@ -106,7 +106,7 @@
 
         /* Botón de carga adaptativo */
         .upload-btn {
-            background-color: var(--color-acento); /* Color dinámico */
+            background-color: var(--color-acento);
             color: #121212;
             padding: 15px 30px;
             font-size: 16px;
@@ -115,7 +115,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
-            box-shadow: 0 4px 15px var(--color-sombra); /* Sombra dinámica */
+            box-shadow: 0 4px 15px var(--color-sombra);
         }
 
         .upload-btn:hover {
@@ -125,17 +125,29 @@
 
         input[type="file"] { display: none; }
 
+        /* EL NUEVO BOTÓN DE VOLVER GAMER CON LUZ */
         .btn-volver {
             position: absolute;
-            top: 10px;
+            top: 12px;
             left: 15px;
             background: none;
-            border: none;
-            color: #aaaaaa;
+            border: 1px solid var(--color-acento);
+            color: var(--color-acento);
+            padding: 5px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
-        .btn-volver:hover { color: var(--color-acento); }
+
+        .btn-volver:hover {
+            color: #ffffff;
+            background-color: var(--color-acento);
+            box-shadow: 0 0 15px var(--color-acento); /* Aquí genera la luz */
+            text-shadow: 0 0 5px #ffffff;
+        }
 
         /* ---------------- CONTENEDOR DEL EMULADOR ---------------- */
         #emulator-container {
@@ -149,22 +161,22 @@
 </head>
 <body>
 
-    <h1 id="titulo-principal">Estación Retro 3D 🕹️</h1>
+    <h1 id="titulo-principal">Estación Retro 3D (Emulador del Sr. Croquetas) 🕹️</h1>
     <p id="subtitulo">Selecciona la plataforma a emular</p>
     
     <div id="main-menu">
         <div class="console-card card-psx" onclick="abrirCarga('psx', '.bin,.img,.chd,.iso', 'PlayStation 1')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Playstation_logo_colour.svg" alt="PS1 Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Playstation_logo_colour.svg/320px-Playstation_logo_colour.svg.png" alt="PS1 Logo">
             <h3>PlayStation 1</h3>
         </div>
 
         <div class="console-card card-nds" onclick="abrirCarga('nds', '.nds', 'Nintendo DS')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Nintendo_DS_Logo.svg" alt="NDS Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Nintendo_DS_Logo.svg/320px-Nintendo_DS_Logo.svg.png" alt="NDS Logo">
             <h3>Nintendo DS</h3>
         </div>
 
         <div class="console-card card-n64" onclick="abrirCarga('n64', '.n64,.z64,.v64', 'Nintendo 64')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0dc/Nintendo_64_Logo.svg" alt="N64 Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0dc/Nintendo_64_Logo.svg/320px-Nintendo_64_Logo.svg.png" alt="N64 Logo">
             <h3>Nintendo 64</h3>
         </div>
     </div>
@@ -188,33 +200,28 @@
         const emuContainer = document.getElementById('emulator-container');
         const subtitulo = document.getElementById('subtitulo');
         const romSelector = document.getElementById('rom-selector');
-        const root = document.documentElement; // Acceso a las variables CSS
+        const root = document.documentElement;
         
         let consolaActiva = "";
 
-        // Al entrar a una consola, cambiamos las variables CSS de golpe
         function abrirCarga(plataforma, extensiones, nombre) {
             consolaActiva = plataforma;
             
-            // CONFIGURACIÓN DE COLORES DINÁMICOS
+            // Configuración de colores
             if (plataforma === 'psx') {
-                // Azul tipo PS4 profundo
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #002561 0%, #000000 100%)');
                 root.style.setProperty('--color-acento', '#0072ce');
                 root.style.setProperty('--color-sombra', 'rgba(0, 114, 206, 0.5)');
             } else if (plataforma === 'n64') {
-                // Rojo Nintendo radical
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #7a0006 0%, #000000 100%)');
                 root.style.setProperty('--color-acento', '#e60012');
                 root.style.setProperty('--color-sombra', 'rgba(230, 0, 18, 0.5)');
             } else if (plataforma === 'nds') {
-                // Cyan Eléctrico / Pantalla Táctil futurista
                 root.style.setProperty('--bg-general', 'linear-gradient(135deg, #004b57 0%, #000000 100%)');
                 root.style.setProperty('--color-acento', '#00e5ff');
                 root.style.setProperty('--color-sombra', 'rgba(0, 229, 255, 0.5)');
             }
 
-            // Cambiar pantallas
             mainMenu.style.display = 'none';
             uploadScreen.style.display = 'flex';
             subtitulo.style.display = 'none';
@@ -224,7 +231,6 @@
             romSelector.accept = extensiones;
         }
 
-        // Al volver atrás, reseteamos las variables al Negro Stealth original
         function volverMenu() {
             root.style.setProperty('--bg-general', 'linear-gradient(3deg, #121212 0%, #000000 100%)');
             root.style.setProperty('--color-acento', '#ffffff');
@@ -236,7 +242,6 @@
             romSelector.value = '';
         }
 
-        // Arrancar el juego
         romSelector.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
