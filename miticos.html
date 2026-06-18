@@ -13,12 +13,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        h1 { color: #00ff66; margin-bottom: 5px; font-size: 28px; text-shadow: 0 0 10px rgba(0,255,102,0.3); font-weight: 800; }
+        h1 { color: #00ff66; margin-top: 40px; margin-bottom: 5px; font-size: 28px; text-shadow: 0 0 10px rgba(0,255,102,0.3); font-weight: 800; }
         p { color: #ffffff; margin-bottom: 30px; font-size: 16px; opacity: 0.8; }
 
         /* ---------------- BOTÓN VOLVER ATRÁS ---------------- */
@@ -39,10 +39,14 @@
         }
         #btn-cerrar-juego:hover { transform: scale(1.05); }
 
-        /* ---------------- REJILLA DE JUEGOS DIRECTOS ---------------- */
+        /* ---------------- REJILLA DE JUEGOS DIRECTOS (REORGANIZADA EN GRID/REFLOW) ---------------- */
         #games-menu {
             display: flex;
-            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 750px; /* Fuerza a que se pongan 3 por fila */
+            margin-bottom: 40px;
         }
 
         .game-card {
@@ -61,12 +65,17 @@
         }
 
         .game-card:hover { transform: translateY(-10px); }
+        
+        /* Colores personalizados de brillo al pasar el ratón */
         .card-doom:hover { border-color: #00ff33; box-shadow: 0 15px 25px rgba(0, 255, 51, 0.4); }
         .card-mario64:hover { border-color: #e60012; box-shadow: 0 15px 25px rgba(230, 0, 18, 0.4); }
         .card-minecraft:hover { border-color: #578a34; box-shadow: 0 15px 25px rgba(87, 138, 52, 0.4); }
+        .card-tomb:hover { border-color: #00ccff; box-shadow: 0 15px 25px rgba(0, 204, 255, 0.4); }
+        .card-diablo:hover { border-color: #ff3300; box-shadow: 0 15px 25px rgba(255, 51, 0, 0.4); }
+        .card-quake:hover { border-color: #ff9900; box-shadow: 0 15px 25px rgba(255, 153, 0, 0.4); }
 
         .game-card img { width: 140px; height: 100px; object-fit: contain; margin-bottom: 15px; }
-        .game-card h3 { margin: 0; color: #ffffff; font-size: 18px; }
+        .game-card h3 { margin: 0; color: #ffffff; font-size: 17px; font-weight: 600; }
 
         /* ---------------- CONTENEDOR PANORÁMICO NATÍVO ---------------- */
         #game-container {
@@ -100,44 +109,4 @@
             <h3>Super Mario 64</h3>
         </div>
         <div class="game-card card-minecraft" onclick="cargarWeb('https://classic.minecraft.net/')">
-            <img src="minecraft_logo.png" alt="Minecraft Classic">
-            <h3>Minecraft Classic</h3>
-        </div>
-    </div>
-
-    <div id="game-container"></div>
-
-    <script>
-        const gamesMenu = document.getElementById('games-menu');
-        const gameContainer = document.getElementById('game-container');
-        const btnVolver = document.getElementById('btn-volver-consolas');
-        const btnCerrar = document.getElementById('btn-cerrar-juego');
-        const titulo = document.getElementById('tit');
-        const sub = document.getElementById('sub');
-
-        function cargarWeb(url) {
-            gamesMenu.style.display = 'none';
-            btnVolver.style.display = 'none';
-            titulo.style.display = 'none';
-            sub.style.display = 'none';
-
-            gameContainer.style.display = 'block';
-            // Cargamos la web nativa directamente en un iframe limpio dentro de los 16:9
-            gameContainer.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" allow="autoplay; gamepad; keyboard"></iframe>`;
-            
-            btnCerrar.style.display = 'block';
-        }
-
-        function cerrarJuego() {
-            gameContainer.style.display = 'none';
-            gameContainer.innerHTML = '';
-            btnCerrar.style.display = 'none';
-
-            titulo.style.display = 'block';
-            sub.style.display = 'block';
-            gamesMenu.style.display = 'flex';
-            btnVolver.style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+            <img src="minecraft_logo.png" alt
