@@ -21,7 +21,7 @@
         h1 { color: #00ff66; margin-top: 40px; margin-bottom: 5px; font-size: 28px; text-shadow: 0 0 10px rgba(0,255,102,0.3); font-weight: 800; }
         p { color: #ffffff; margin-bottom: 30px; font-size: 16px; opacity: 0.8; }
 
-        /* ---------------- BOTÓN VOLVER ATRÁS ---------------- */
+        /* ---------------- BOTONES DE NAVEGACIÓN ---------------- */
         #btn-volver-consolas {
             position: absolute; top: 20px; left: 20px; text-decoration: none; 
             background: #ffffff; border: 2px solid #ffffff; color: #121212; 
@@ -30,7 +30,6 @@
         }
         #btn-volver-consolas:hover { transform: scale(1.05); }
 
-        /* Botón de cerrar el juego activo */
         #btn-cerrar-juego {
             display: none; position: absolute; top: 20px; left: 20px; 
             background: #ff3333; border: none; color: white; padding: 10px 20px; 
@@ -39,13 +38,20 @@
         }
         #btn-cerrar-juego:hover { transform: scale(1.05); }
 
-        /* ---------------- REJILLA DE JUEGOS DIRECTOS (REORGANIZADA EN GRID/REFLOW) ---------------- */
+        /* Enlace de emergencia por si el iframe falla */
+        #link-emergencia {
+            display: none; position: absolute; top: 20px; right: 20px;
+            color: #ffcc00; text-decoration: underline; font-weight: bold; z-index: 100;
+            cursor: pointer;
+        }
+
+        /* ---------------- CATÁLOGO DE JUEGOS ---------------- */
         #games-menu {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 25px;
-            max-width: 750px; /* Fuerza a que se pongan 3 por fila */
+            max-width: 750px;
             margin-bottom: 40px;
         }
 
@@ -66,7 +72,6 @@
 
         .game-card:hover { transform: translateY(-10px); }
         
-        /* Colores personalizados de brillo al pasar el ratón */
         .card-doom:hover { border-color: #00ff33; box-shadow: 0 15px 25px rgba(0, 255, 51, 0.4); }
         .card-mario64:hover { border-color: #e60012; box-shadow: 0 15px 25px rgba(230, 0, 18, 0.4); }
         .card-minecraft:hover { border-color: #578a34; box-shadow: 0 15px 25px rgba(87, 138, 52, 0.4); }
@@ -77,7 +82,7 @@
         .game-card img { width: 140px; height: 100px; object-fit: contain; margin-bottom: 15px; }
         .game-card h3 { margin: 0; color: #ffffff; font-size: 17px; font-weight: 600; }
 
-        /* ---------------- CONTENEDOR PANORÁMICO NATÍVO ---------------- */
+        /* ---------------- CONTENEDOR PANORÁMICO 16:9 ---------------- */
         #game-container {
             width: 854px; 
             height: 480px; 
@@ -95,18 +100,98 @@
 
     <a href="index.html" id="btn-volver-consolas">← Ver Consolas</a>
     <button id="btn-cerrar-juego" onclick="cerrarJuego()">❌ Cerrar Juego</button>
+    <a id="link-emergencia" target="_blank">⚠️ ¿No carga? Jugar a pantalla completa</a>
 
     <h1 id="tit">Juegos Míticos Nativos 🕹️</h1>
-    <p id="sub">Ejecución directa en el navegador, sin descargas ni emuladores.</p>
+    <p id="sub">Ejecución directa en el navegador, sin descargas ni complicaciones.</p>
 
     <div id="games-menu">
         <div class="game-card card-doom" onclick="cargarWeb('https://wadcmd.com/')">
             <img src="doom_logo.png" alt="DOOM">
             <h3>DOOM</h3>
         </div>
-        <div class="game-card card-mario64" onclick="cargarWeb('https://super-mario-64.bitbucket.io/')">
+        
+        <div class="game-card card-mario64" onclick="cargarRomAutomatica('n64', 'roms/mario64.z64')">
             <img src="mario_logo.png" alt="Super Mario 64">
             <h3>Super Mario 64</h3>
         </div>
+        
         <div class="game-card card-minecraft" onclick="cargarWeb('https://classic.minecraft.net/')">
-            <img src="minecraft_logo.png" alt
+            <img src="minecraft_logo.png" alt="Minecraft Classic">
+            <h3>Minecraft Classic</h3>
+        </div>
+        <div class="game-card card-tomb" onclick="cargarWeb('https://xproger.info/projects/OpenLara/')">
+            <img src="tomb_raider_logo.png" alt="Tomb Raider">
+            <h3>Tomb Raider I</h3>
+        </div>
+        <div class="game-card card-diablo" onclick="cargarWeb('https://d07riv.github.io/diabloweb/')">
+            <img src="diablo_logo.png" alt="Diablo">
+            <h3>Diablo I</h3>
+        </div>
+        <div class="game-card card-quake" onclick="cargarWeb('https://www.quakejs.com/')">
+            <img src="quake_logo.png" alt="Quake">
+            <h3>Quake JS</h3>
+        </div>
+    </div>
+
+    <div id="game-container"></div>
+
+    <script>
+        const gamesMenu = document.getElementById('games-menu');
+        const gameContainer = document.getElementById('game-container');
+        const btnVolver = document.getElementById('btn-volver-consolas');
+        const btnCerrar = document.getElementById('btn-cerrar-juego');
+        const linkEmergencia = document.getElementById('link-emergencia');
+        const titulo = document.getElementById('tit');
+        const sub = document.getElementById('sub');
+
+        // MÉTODOS DE CARGA
+        function ocultarInterfaz() {
+            gamesMenu.style.display = 'none';
+            btnVolver.style.display = 'none';
+            titulo.style.display = 'none';
+            sub.style.display = 'none';
+            gameContainer.style.display = 'block';
+            btnCerrar.style.display = 'block';
+        }
+
+        // MÓDULO A: Iframe para webs que sí lo permiten (Doom, OpenLara...)
+        function cargarWeb(url) {
+            ocultarInterfaz();
+            gameContainer.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" allow="autoplay; gamepad; keyboard"></iframe>`;
+            
+            // Mostramos el link de emergencia por si acaso el servidor cambia políticas
+            linkEmergencia.href = url;
+            linkEmergencia.style.display = 'block';
+        }
+
+        // MÓDULO B: Automatización instantánea para Mario 64 usando tus ROMs locales
+        function cargarRomAutomatica(core, rutaRom) {
+            ocultarInterfaz();
+            gameContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
+            
+            window.EJS_player = '#game';
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
+            window.EJS_gameUrl = rutaRom; // Carga directa del archivo de tu servidor
+            window.EJS_startOnLoaded = true;
+            window.EJS_core = core;
+            
+            const script = document.createElement('script');
+            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
+            document.body.appendChild(script);
+        }
+
+        function cerrarJuego() {
+            gameContainer.style.display = 'none';
+            gameContainer.innerHTML = '';
+            btnCerrar.style.display = 'none';
+            linkEmergencia.style.display = 'none';
+
+            titulo.style.display = 'block';
+            sub.style.display = 'block';
+            gamesMenu.style.display = 'flex';
+            btnVolver.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
