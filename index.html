@@ -80,8 +80,6 @@
             width: 130px;
             object-fit: contain;
             margin-bottom: 15px;
-            /* Si bajas las fotos ya en blanco, puedes borrar esta línea de abajo. 
-               Si las bajas en negro, esta línea las vuelve blancas automáticamente */
             filter: brightness(0) invert(1); 
         }
 
@@ -150,10 +148,12 @@
             text-shadow: 0 0 5px #ffffff;
         }
 
-        /* ---------------- CONTENEDOR DEL EMULADOR ---------------- */
+        /* ---------------- CONTENEDOR DEL EMULADOR (ACTUALIZADO A 16:9) ---------------- */
         #emulator-container {
-            width: 800px; height: 600px;
-            max-width: 95vw; max-height: 80vh;
+            width: 854px; 
+            height: 480px; /* <--- Formato panorámico de combate */
+            max-width: 95vw; 
+            max-height: 80vh;
             display: none;
             border-radius: 12px;
             overflow: hidden;
@@ -276,6 +276,5 @@
             document.body.appendChild(script);
         });
     </script>
-
 </body>
 </html>
