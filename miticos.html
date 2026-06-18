@@ -38,7 +38,6 @@
         }
         #btn-cerrar-juego:hover { transform: scale(1.05); }
 
-        /* Enlace de emergencia por si el iframe falla */
         #link-emergencia {
             display: none; position: absolute; top: 20px; right: 20px;
             color: #ffcc00; text-decoration: underline; font-weight: bold; z-index: 100;
@@ -73,7 +72,6 @@
         .game-card:hover { transform: translateY(-10px); }
         
         .card-doom:hover { border-color: #00ff33; box-shadow: 0 15px 25px rgba(0, 255, 51, 0.4); }
-        .card-mario64:hover { border-color: #e60012; box-shadow: 0 15px 25px rgba(230, 0, 18, 0.4); }
         .card-minecraft:hover { border-color: #578a34; box-shadow: 0 15px 25px rgba(87, 138, 52, 0.4); }
         .card-tomb:hover { border-color: #00ccff; box-shadow: 0 15px 25px rgba(0, 204, 255, 0.4); }
         .card-diablo:hover { border-color: #ff3300; box-shadow: 0 15px 25px rgba(255, 51, 0, 0.4); }
@@ -110,27 +108,23 @@
             <img src="doom_logo.png" alt="DOOM">
             <h3>DOOM</h3>
         </div>
-        
-        <div class="game-card card-mario64" onclick="cargarRomAutomatica('n64', 'roms/mario64.z64')">
-            <img src="mario_logo.png" alt="Super Mario 64">
-            <h3>Super Mario 64</h3>
-        </div>
-        
         <div class="game-card card-minecraft" onclick="cargarWeb('https://classic.minecraft.net/')">
             <img src="minecraft_logo.png" alt="Minecraft Classic">
             <h3>Minecraft Classic</h3>
         </div>
-        <div class="game-card card-tomb" onclick="cargarWeb('https://xproger.info/projects/OpenLara/')">
+        
+        <div class="game-card card-tomb" onclick="abrirPestana('https://xproger.info/projects/OpenLara/')">
             <img src="tomb_raider_logo.png" alt="Tomb Raider">
             <h3>Tomb Raider I</h3>
         </div>
+        <div class="game-card card-quake" onclick="abrirPestana('https://www.quakejs.com/')">
+            <img src="quake_logo.png" alt="Quake">
+            <h3>Quake JS</h3>
+        </div>
+        
         <div class="game-card card-diablo" onclick="cargarWeb('https://d07riv.github.io/diabloweb/')">
             <img src="diablo_logo.png" alt="Diablo">
             <h3>Diablo I</h3>
-        </div>
-        <div class="game-card card-quake" onclick="cargarWeb('https://www.quakejs.com/')">
-            <img src="quake_logo.png" alt="Quake">
-            <h3>Quake JS</h3>
         </div>
     </div>
 
@@ -145,7 +139,6 @@
         const titulo = document.getElementById('tit');
         const sub = document.getElementById('sub');
 
-        // MÉTODOS DE CARGA
         function ocultarInterfaz() {
             gamesMenu.style.display = 'none';
             btnVolver.style.display = 'none';
@@ -155,30 +148,17 @@
             btnCerrar.style.display = 'block';
         }
 
-        // MÓDULO A: Iframe para webs que sí lo permiten (Doom, OpenLara...)
         function cargarWeb(url) {
             ocultarInterfaz();
             gameContainer.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none;" allow="autoplay; gamepad; keyboard"></iframe>`;
             
-            // Mostramos el link de emergencia por si acaso el servidor cambia políticas
             linkEmergencia.href = url;
             linkEmergencia.style.display = 'block';
         }
 
-        // MÓDULO B: Automatización instantánea para Mario 64 usando tus ROMs locales
-        function cargarRomAutomatica(core, rutaRom) {
-            ocultarInterfaz();
-            gameContainer.innerHTML = '<div id="game" style="width:100%; height:100%;"></div>';
-            
-            window.EJS_player = '#game';
-            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/latest/data/';
-            window.EJS_gameUrl = rutaRom; // Carga directa del archivo de tu servidor
-            window.EJS_startOnLoaded = true;
-            window.EJS_core = core;
-            
-            const script = document.createElement('script');
-            script.src = "https://cdn.emulatorjs.org/latest/data/loader.js";
-            document.body.appendChild(script);
+        // Nueva función para lanzar los juegos protegidos en pestaña limpia
+        function abrirPestana(url) {
+            window.open(url, '_blank');
         }
 
         function cerrarJuego() {
